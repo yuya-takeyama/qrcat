@@ -62,7 +62,9 @@ func printAsPNG(code *qr.Code) {
 func printAsASCII(code *qr.Code) {
 	out := new(bytes.Buffer)
 
+	printBorder(out, code)
 	for i := 0; i < code.Size; i++ {
+		out.WriteString(ansi.Color("  ", "black:white"))
 		for j := 0; j < code.Size; j++ {
 			if code.Black(i, j) {
 				out.WriteString(ansi.Color("  ", "white:black"))
@@ -70,10 +72,19 @@ func printAsASCII(code *qr.Code) {
 				out.WriteString(ansi.Color("  ", "black:white"))
 			}
 		}
+		out.WriteString(ansi.Color("  ", "black:white"))
 		out.WriteString("\n")
 	}
+	printBorder(out, code)
 
 	out.WriteTo(os.Stdout)
+}
+
+func printBorder(out *bytes.Buffer, code *qr.Code) {
+	for i := 0; i < code.Size+2; i++ {
+		out.WriteString(ansi.Color("  ", "black:white"))
+	}
+	out.WriteString("\n")
 }
 
 func printAsURI(code *qr.Code) {
