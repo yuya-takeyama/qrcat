@@ -28,7 +28,7 @@ var format Format
 func init() {
 	var err error
 
-	flag.StringVar(&formatStr, "format", "ascii", "output format (ascii (by default) or png)")
+	flag.StringVar(&formatStr, "format", "ascii", "output format (ascii|png|uri)")
 	flag.Parse()
 
 	format = str2format(formatStr)
