@@ -2,6 +2,8 @@
 
 Generate QR codes in UNIX way
 
+![capture](images/capture.png)
+
 ## Installation
 
 ```
