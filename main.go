@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/base64"
 	"flag"
 	"io"
 	"os"
@@ -16,6 +17,7 @@ type Format int
 const (
 	ASCII Format = iota
 	PNG
+	URI
 )
 
 var reader io.Reader
@@ -43,10 +45,13 @@ func main() {
 	code, err := qr.Encode(buf.String(), qr.H)
 	panicIf(err)
 
-	if format == ASCII {
+	switch format {
+	case ASCII:
 		printAsASCII(code)
-	} else {
+	case PNG:
 		printAsPNG(code)
+	case URI:
+		printAsURI(code)
 	}
 }
 
@@ -71,9 +76,22 @@ func printAsASCII(code *qr.Code) {
 	out.WriteTo(os.Stdout)
 }
 
+func printAsURI(code *qr.Code) {
+	out := new(bytes.Buffer)
+	out.WriteString("data:image/png;base64,")
+	encoder := base64.NewEncoder(base64.StdEncoding, out)
+	encoder.Write(code.PNG())
+	encoder.Close()
+	out.WriteString("\n")
+
+	out.WriteTo(os.Stdout)
+}
+
 func str2format(str string) Format {
 	if str == "png" || str == "p" {
 		return PNG
+	} else if str == "uri" || str == "url" || str == "u" {
+		return URI
 	} else {
 		return ASCII
 	}
