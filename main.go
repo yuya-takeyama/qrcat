@@ -88,14 +88,12 @@ func printBorder(out *bytes.Buffer, code *qr.Code) {
 }
 
 func printAsURI(code *qr.Code) {
-	out := new(bytes.Buffer)
+	out := os.Stdout
 	out.WriteString("data:image/png;base64,")
 	encoder := base64.NewEncoder(base64.StdEncoding, out)
 	encoder.Write(code.PNG())
 	encoder.Close()
 	out.WriteString("\n")
-
-	out.WriteTo(os.Stdout)
 }
 
 func str2format(str string) Format {
