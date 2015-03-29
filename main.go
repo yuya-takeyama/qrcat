@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"flag"
+	"fmt"
 	"io"
 	"os"
 
@@ -24,11 +25,13 @@ var reader io.Reader
 var buf *bytes.Buffer
 var formatStr string
 var format Format
+var displayVersion bool
 
 func init() {
 	var err error
 
 	flag.StringVar(&formatStr, "format", "ascii", "output format (ascii|png|uri)")
+	flag.BoolVar(&displayVersion, "version", false, "display version")
 	flag.Parse()
 
 	format = str2format(formatStr)
@@ -39,6 +42,11 @@ func init() {
 }
 
 func main() {
+	if displayVersion {
+		fmt.Fprintf(os.Stdout, "qrcat v%s, build %s\n", Version, GitCommit)
+		return
+	}
+
 	_, err := buf.ReadFrom(reader)
 	panicIf(err)
 
