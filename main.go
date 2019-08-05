@@ -8,9 +8,9 @@ import (
 	"io"
 	"os"
 
-	"code.google.com/p/rsc/qr"
 	"github.com/mgutz/ansi"
 	"github.com/yuya-takeyama/argf"
+	"rsc.io/qr"
 )
 
 type Format int
